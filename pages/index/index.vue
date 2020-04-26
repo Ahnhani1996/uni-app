@@ -1,0 +1,309 @@
+<template>
+    <view>
+        <swipers :background="imgUrls"></swipers>
+        <view class="data">
+            <view>已报名</view>
+            <view>总报名</view>
+            <view>浏览量</view>
+        </view>
+        <button class="enroll-btn" @click="intentToEnroll">我要报名</button>
+        <view class="countdown">距离活动结束：{{countdown}}</view>
+        <view class="search">
+            <input type="text" placeholder="姓名">
+            <button>搜索</button>
+        </view>
+        <view class="picker">
+            <picker @change="selectSchool" :value="schoolIndex" :range="schoolArray">
+                {{schoolArray[schoolIndex]}}
+            </picker>
+        </view>
+        <view class="player">
+            <view class="player-item" v-for="(item,i) in playerArray" :key="i" @click="intentToVote">
+                <view class="id">编号:{{item.id}}</view>
+                <view class="img"></view>
+                <view>{{item.name}}</view>
+                <view class="poll">{{item.poll}}票</view>
+                <button>投票</button>
+            </view>
+        </view>
+        <view class="music" @click="backgroundMusicControl">
+            音乐
+        </view>
+        <view class="fixed">
+            <view @click="intentToActivity">列表</view>
+            <view>关注</view>
+            <view>客服</view>
+        </view>
+    </view>
+</template>
+
+<script>
+    import swiper from "../../components/swiper";
+
+    const innerAudioContext = uni.createInnerAudioContext();
+
+    export default {
+        components: {
+            "swipers": swiper
+        },
+        data() {
+            return {
+                imgUrls: [
+                    'http://mss.sankuai.com/v1/mss_51a7233366a4427fa6132a6ce72dbe54/newsPicture/05558951-de60-49fb-b674-dd906c8897a6',
+                    'http://mss.sankuai.com/v1/mss_51a7233366a4427fa6132a6ce72dbe54/coursePicture/0fbcfdf7-0040-4692-8f84-78bb21f3395d',
+                    'http://mss.sankuai.com/v1/mss_51a7233366a4427fa6132a6ce72dbe54/management-school-picture/7683b32e-4e44-4b2f-9c03-c21f34320870'
+                ],
+                countdown: "",
+                schoolArray: [
+                    '选择分组',
+                    '北大青鸟鲁广校区',
+                    '北大青鸟光谷校区',
+                    '北大青鸟光谷学院',
+                    '课工场华中直营总校',
+                    '课工场徐东校区',
+                    '课工场光谷校区',
+                    '课工场郑州兰德校区',
+                    '北大青鸟徐东校区'
+                ],
+                schoolIndex: "0",
+                playerArray: [
+                    {id: 50, name: '张三', poll: 10},
+                    {id: 100, name: '李四', poll: 15},
+                    {id: 1000, name: '王五', poll: 20}
+                ],
+                backgroundMusicStatus: true
+            }
+        },
+        onLoad() {
+            this.getCountdown();
+            this.backgroundMusic();
+        },
+        methods: {
+            getCountdown() {
+                setInterval(() => {
+                    //获取当前时间
+                    let nowTime = new Date().getTime();
+                    //获取截止时间
+                    let endTime = new Date('2020/06/01 00:00:00').getTime();
+                    //获取时间差
+                    let difference = (endTime - nowTime) / 1000;
+                    //时间差转换成时分秒
+                    const res = {
+                        'day': difference / 24 / 3600,
+                        'hour': difference / 3600 % 24,
+                        'minute': difference / 60 % 60,
+                        'second': difference % 60
+                    };
+                    //时分秒分别向下取整
+                    const day = Math.floor(res.day);
+                    const hours = Math.floor(res.hour);
+                    const minutes = Math.floor(res.minute);
+                    const seconds = Math.floor(res.second);
+                    //拼接倒计时
+                    this.countdown = day + '天 ' + hours + '时 ' + minutes + '分 ' + seconds + '秒';
+                }, 1000)
+            },
+            selectSchool(e) {
+                this.schoolIndex = e.target.value
+            },
+            intentToEnroll() {
+                uni.navigateTo({
+                    url: '../enroll/enroll'
+                });
+            },
+            backgroundMusic() {
+                this.backgroundMusicStatus = true;
+                //innerAudioContext.autoplay = true;
+                innerAudioContext.src = 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/audio/music.mp3';
+            },
+            backgroundMusicControl() {
+                if (this.backgroundMusicStatus === true) {
+                    this.backgroundMusicStatus = !this.backgroundMusicStatus;
+                    innerAudioContext.pause();
+                } else {
+                    this.backgroundMusicStatus = !this.backgroundMusicStatus;
+                    innerAudioContext.play();
+                }
+            },
+            intentToActivity(){
+                uni.navigateTo({
+                    url: '../activity/activity'
+                });
+            },
+            intentToVote(){
+                uni.navigateTo({
+                    url: '../vote/vote'
+                });
+            }
+        }
+    }
+</script>
+
+<style scoped lang="scss">
+    .data {
+        width: 95%;
+        min-height: 65px;
+        line-height: 65px;
+        margin: 3% auto 3%;
+        color: #ffffff;
+        background-color: #31c8b1;
+        border-radius: 5px;
+        display: flex;
+        flex-wrap: nowrap;
+
+        view {
+            width: 33.3%;
+            text-align: center;
+        }
+    }
+
+    .enroll-btn {
+        width: 70%;
+        color: #ffffff;
+        background-color: #32c8b1;
+        margin-bottom: 3%;
+
+        &:after {
+            border: none;
+        }
+    }
+
+    .countdown {
+        width: 95%;
+        margin: 0 auto 3%;
+        color: #758697;
+        background-color: #f5fefe;
+        border: 1px solid #c8ebf1;
+        border-bottom: none;
+        border-radius: 5px 5px 0 0;
+        line-height: 2.5;
+        text-align: center;
+    }
+
+    .search {
+        width: 96%;
+        margin: 0 auto 3%;
+        display: flex;
+
+        input {
+            width: 66.6%;
+            height: 35px;
+            padding-left: 3%;
+            background-color: #fefefe;
+        }
+
+        button {
+            width: 33.3%;
+            height: 35px;
+            line-height: 35px;
+            color: #ffffff;
+            background-color: #31c8b1;
+            border-radius: 0;
+
+            &:after {
+                border: none;
+            }
+        }
+    }
+
+    .picker {
+        width: 96%;
+        margin: 0 auto 3%;
+
+        picker {
+            width: 49%;
+            color: #ffffff;
+            line-height: 2;
+            text-align: center;
+            background-color: #31c8b1;
+        }
+    }
+
+    .player {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        width: 96%;
+        margin: 0 auto;
+
+        .player-item {
+            width: 49%;
+            background-color: #fefefe;
+            position: relative;
+            margin-bottom: 2%;
+
+            view {
+                width: 90%;
+                margin: 0 auto;
+                font-size: 13px;
+                line-height: 2;
+                color: #758697;
+            }
+
+            .id {
+                margin: 0;
+                max-width: 50%;
+                color: #ffffff;
+                opacity: .5;
+                background-color: #000;
+                font-size: 13px;
+                padding: 0 5px;
+                text-align: center;
+                position: absolute;
+            }
+
+            .img {
+                width: 100%;
+                min-height: 180px;
+                background-color: red;
+            }
+
+            .poll {
+                color: #31c8b1;
+            }
+
+            button {
+                width: 90%;
+                color: #ffffff;
+                background-color: #31c8b1;
+                font-size: 16px;
+                text-align: center;
+                line-height: 2;
+                border-radius: 0;
+                margin-bottom: 3%;
+
+                &:after {
+                    border: none;
+                }
+            }
+        }
+    }
+
+    .music {
+        position: fixed;
+        right: 0;
+        top: 5%;
+    }
+
+    .fixed {
+        position: fixed;
+        left: 0;
+        bottom: 1%;
+        z-index: 999;
+
+        view {
+            width: 35px;
+            height: 35px;
+            line-height: 35px;
+            color: #8796b2;
+            text-align: center;
+            font-size: 12px;
+            background-color: #f5fefe;
+            border-bottom: 1px solid #c9ebf1;
+
+            &:last-child {
+                border: none;
+            }
+        }
+    }
+</style>

@@ -1,0 +1,116 @@
+{
+    "pages": [
+        {
+            "path": "pages/options/options",
+            "style": {
+                "navigationBarTitleText": "",
+                "navigationBarBackgroundColor": "#9ccf5b"
+            }
+        },
+        {
+            "path": "pages/index/index",
+            "style": {
+                "navigationBarTitleText": "宏鹏教育程序员美学摄影展",
+                "navigationBarBackgroundColor": "#9ccf5b",
+                "navigationBarTextStyle": "white"
+            }
+        },
+        {
+            "path": "pages/ranking-list/ranking-list",
+            "style": {
+                "navigationBarTitleText": "宏鹏教育程序员美学摄影展",
+                "navigationBarBackgroundColor": "#9ccf5b",
+                "navigationBarTextStyle": "white"
+            }
+        },
+        {
+            "path": "pages/about/about",
+            "style": {
+                "navigationBarTitleText": "",
+                "navigationBarBackgroundColor": "#9ccf5b"
+            }
+        },
+        {
+            "path": "pages/activity/activity",
+            "style": {
+                "navigationBarTitleText": "",
+                "navigationBarBackgroundColor": "#9ccf5b"
+            }
+        },
+        {
+            "path": "pages/enroll/enroll",
+            "style": {
+                "navigationBarTitleText": "",
+                "navigationBarBackgroundColor": "#9ccf5b"
+            }
+        },
+        {
+            "path": "pages/question-index/question-index",
+            "style": {
+                "navigationBarTitleText": "",
+                "navigationBarBackgroundColor": "#9ccf5b"
+            }
+        },
+        {
+            "path": "pages/question-item/question-item",
+            "style": {
+                "navigationBarTitleText": "",
+                "navigationBarBackgroundColor": "#9ccf5b"
+            }
+        },
+        {
+            "path": "pages/submit/submit",
+            "style": {
+                "navigationBarTitleText": "",
+                "navigationBarBackgroundColor": "#9ccf5b"
+            }
+        },
+        {
+            "path": "pages/lottery/lottery",
+            "style": {
+                "navigationBarTitleText": "",
+                "navigationBarBackgroundColor": "#9ccf5b"
+            }
+        },
+        {
+            "path": "pages/vote/vote",
+            "style": {
+                "navigationBarTitleText": "",
+                "navigationBarBackgroundColor": "#9ccf5b"
+            }
+        },
+        {
+            "path": "pages/gift/gift",
+            "style": {
+                "navigationBarTitleText": "",
+                "navigationBarBackgroundColor": "#9ccf5b"
+            }
+        }
+    ],
+    "tabBar": {
+        "color": "#353535",
+        "selectedColor": "#51aa37",
+        "backgroundColor": "#ffffff",
+        "borderStyle": "white",
+        "list": [
+            {
+                "pagePath": "pages/index/index",
+                "text": "首页"
+            },
+            {
+                "pagePath": "pages/ranking-list/ranking-list",
+                "text": "排行榜"
+            },
+            {
+                "pagePath": "pages/about/about",
+                "text": "说明"
+            }
+        ]
+    },
+    "globalStyle": {
+        "navigationBarTextStyle": "black",
+        "navigationBarTitleText": "uni-app",
+        "navigationBarBackgroundColor": "#F8F8F8",
+        "backgroundColor": "#F8F8F8"
+    }
+}
