@@ -75,16 +75,16 @@
             }
         },
         onLoad() {
-            this.getCountdown();
+            this.getCountdown('2020/06/01 00:00:00');
             this.backgroundMusic();
         },
         methods: {
-            getCountdown() {
+            getCountdown(date) {
                 setInterval(() => {
                     //获取当前时间
                     let nowTime = new Date().getTime();
                     //获取截止时间
-                    let endTime = new Date('2020/06/01 00:00:00').getTime();
+                    let endTime = new Date(date).getTime();
                     //获取时间差
                     let difference = (endTime - nowTime) / 1000;
                     //时间差转换成时分秒
@@ -125,12 +125,12 @@
                     innerAudioContext.play();
                 }
             },
-            intentToActivity(){
+            intentToActivity() {
                 uni.navigateTo({
                     url: '../activity/activity'
                 });
             },
-            intentToVote(){
+            intentToVote() {
                 uni.navigateTo({
                     url: '../vote/vote'
                 });
