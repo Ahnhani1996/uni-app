@@ -16,7 +16,7 @@
                 <view class="btn">
                     <button @click="reduceGift">-</button>
                     <view>{{count}}</view>
-                    <button @click="addGift">+</button>
+                    <button @click="incrementGift">+</button>
                 </view>
             </view>
         </view>
@@ -61,7 +61,7 @@
                 this.currentSelected = index;
                 this.count = 1
             },
-            addGift() {
+            incrementGift() {
                 this.count += 1;
             },
             reduceGift() {
