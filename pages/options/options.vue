@@ -22,6 +22,9 @@
     import swiper from "../../components/swiper";
 
     export default {
+        components: {
+            "swipers": swiper
+        },
         data() {
             return {
                 imgUrls: [
@@ -31,13 +34,16 @@
                 ]
             }
         },
+        created() {
+            this.apiTest()
+        },
         methods: {
-            intentToActivity(){
+            intentToActivity() {
                 uni.navigateTo({
                     url: '../activity/activity'
                 })
             },
-            intentToQuestion(){
+            intentToQuestion() {
                 uni.navigateTo({
                     url: '../question-index/question-index'
                 })
@@ -47,10 +53,16 @@
                     title: '温馨提示',
                     content: '正在努力开发中，敬请期待~'
                 })
+            },
+            apiTest() {
+                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/getAppid', {
+                    code: 500
+                }).then(res => {
+                    console.log(res)
+                }).catch(err => {
+                    console.log(err)
+                })
             }
-        },
-        components: {
-            "swipers": swiper
         }
     }
 </script>

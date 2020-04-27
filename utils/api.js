@@ -11,7 +11,7 @@ fly.interceptors.response.use(response => {
     return response.data
 }, error => {
     return Promise.resolve(error.response)
-})
+});
 
 export default {
     get(url, obj) {
@@ -19,7 +19,7 @@ export default {
             fly.request({
                 method: "get",
                 url: url,
-                params: obj || {}
+                body: obj || {}
             }).then(result => {
                 resolve(result)
             }).catch(error => {
@@ -32,7 +32,10 @@ export default {
             fly.request({
                 method: "post",
                 url: url,
-                params: obj || {}
+                body: obj || {},
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
             }).then(result => {
                 resolve(result)
             }).catch(error => {
