@@ -55,13 +55,33 @@
                 })
             },
             apiTest() {
-                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/getAppid', {
-                    code: 500
-                }).then(res => {
-                    console.log(res)
-                }).catch(err => {
-                    console.log(err)
+                let that = this;
+                uni.login({
+                    success: (res) => {
+                        that.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/getAppid', {
+                            code: res.code
+                        }).then((res) => {
+                            console.log(res)
+                        })
+                    }
                 })
+                /*uni.getSetting({
+                    success(res) {
+                        uni.getUserInfo({
+                            success(res) {
+                                uni.login({
+                                    success: (res) => {
+                                        that.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/getAppid', {
+                                            code: res.code
+                                        }).then((res) => {
+                                            console.log(res)
+                                        })
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })*/
             }
         }
     }

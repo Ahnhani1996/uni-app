@@ -288,7 +288,7 @@
     .fixed {
         position: fixed;
         left: 0;
-        bottom: 1%;
+        top: 80%;
         z-index: 999;
 
         view {
