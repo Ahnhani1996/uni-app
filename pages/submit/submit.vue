@@ -30,7 +30,7 @@
                 </picker>
             </view>
         </view>
-        <button class="submit-btn" @click="intentToLottery">
+        <button type="primary" class="submit-btn" @click="intentToLottery">
             提交
         </button>
     </view>
@@ -177,12 +177,5 @@
 
     .submit-btn {
         width: 50%;
-        color: #ffffff;
-        background-color: #1aad19;
-        border: 1px solid #168a15;
-
-        &:after {
-            border: none;
-        }
     }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <view>
-        <button open-type="getUserInfo" @getuserinfo="bindGetUserInfo">授权登录</button>
+        <button type="primary" open-type="getUserInfo" @getuserinfo="bindGetUserInfo">授权登录</button>
     </view>
 </template>
 

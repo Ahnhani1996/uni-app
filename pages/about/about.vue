@@ -1,17 +1,37 @@
 <template>
-    <div>
-    </div>
+    <view>
+        <view class="introduction" v-html="introduction"></view>
+    </view>
 </template>
 
 <script>
     export default {
         data() {
-            return {}
+            return {
+                introduction: ''
+            }
         },
-        methods: {}
+        created() {
+            this.getIndexData();
+        },
+        methods: {
+            getIndexData() {
+                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/list', {
+                    activityId: 1
+                }).then((res) => {
+                    console.log(res.data.data);
+                    this.introduction = res.data.data.hdActivity.introduction;
+                })
+            }
+        }
     }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+    .introduction {
+        width: 90%;
+        margin: 0 auto;
+        padding: 3%;
+        background-color: #fefefe;
+    }
 </style>

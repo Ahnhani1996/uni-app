@@ -3,7 +3,6 @@
         <view class="lottery-box">
             <view class="start" @click="clickStart">抽奖</view>
             <view v-for="(item,i) in giftList" :key="i" :class="['item','item'+(i+1),{'active':index===i}]">
-
             </view>
         </view>
     </view>

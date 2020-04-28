@@ -51,7 +51,7 @@
             nextQuestion() {
                 if (getApp().globalData.answer.length === this.length) {
                     console.log('已回答问题等于数组长度')
-                    uni.navigateTo({
+                    uni.reLaunch({
                         url: '../submit/submit'
                     })
                 } else if (getApp().globalData.answer.length === parseInt(this.index) + 1) {

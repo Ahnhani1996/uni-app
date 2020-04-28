@@ -2,9 +2,18 @@
     <view>
         <swipers :background="imgUrls"></swipers>
         <view class="data">
-            <view>已报名</view>
-            <view>总报名</view>
-            <view>浏览量</view>
+            <view class="item">
+                <view class="num">{{enroll}}</view>
+                <view>已报名</view>
+            </view>
+            <view class="item">
+                <view class="num">{{sumVote}}</view>
+                <view>总报名</view>
+            </view>
+            <view class="item">
+                <view class="num">{{browse}}</view>
+                <view>浏览量</view>
+            </view>
         </view>
         <button class="enroll-btn" @click="intentToEnroll">我要报名</button>
         <view class="countdown">距离活动结束：{{countdown}}</view>
@@ -48,11 +57,10 @@
         },
         data() {
             return {
-                imgUrls: [
-                    'http://mss.sankuai.com/v1/mss_51a7233366a4427fa6132a6ce72dbe54/newsPicture/05558951-de60-49fb-b674-dd906c8897a6',
-                    'http://mss.sankuai.com/v1/mss_51a7233366a4427fa6132a6ce72dbe54/coursePicture/0fbcfdf7-0040-4692-8f84-78bb21f3395d',
-                    'http://mss.sankuai.com/v1/mss_51a7233366a4427fa6132a6ce72dbe54/management-school-picture/7683b32e-4e44-4b2f-9c03-c21f34320870'
-                ],
+                imgUrls: [],
+                enroll: 0,
+                sumVote: 0,
+                browse: 0,
                 countdown: "",
                 schoolArray: [
                     '选择分组',
@@ -75,8 +83,10 @@
             }
         },
         onLoad() {
-            this.getCountdown('2020/06/01 00:00:00');
             this.backgroundMusic();
+        },
+        created() {
+            this.getIndexData()
         },
         methods: {
             getCountdown(date) {
@@ -114,7 +124,6 @@
             backgroundMusic() {
                 this.backgroundMusicStatus = true;
                 //innerAudioContext.autoplay = true;
-                innerAudioContext.src = 'https://img-cdn-qiniu.dcloud.net.cn/uniapp/audio/music.mp3';
             },
             backgroundMusicControl() {
                 if (this.backgroundMusicStatus === true) {
@@ -134,6 +143,21 @@
                 uni.navigateTo({
                     url: '../vote/vote'
                 });
+            },
+            getIndexData() {
+                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/list', {
+                    activityId: 1
+                }).then((res) => {
+                    console.log(res.data.data);
+                    res.data.data.coverList.forEach((data) => {
+                        this.imgUrls.push(data.url)
+                    });
+                    this.enroll = res.data.data.hdActivity.enroll;
+                    this.sumVote = res.data.data.hdActivity.sumVote;
+                    this.browse = res.data.data.hdActivity.browse;
+                    this.getCountdown(res.data.data.hdActivity.end);
+                    innerAudioContext.src = res.data.data.hdActivity.music;
+                })
             }
         }
     }
@@ -143,17 +167,21 @@
     .data {
         width: 95%;
         min-height: 65px;
-        line-height: 65px;
         margin: 3% auto 3%;
         color: #ffffff;
         background-color: #31c8b1;
         border-radius: 5px;
         display: flex;
         flex-wrap: nowrap;
+        align-items: center;
 
-        view {
+        .item {
             width: 33.3%;
             text-align: center;
+
+            .num {
+
+            }
         }
     }
 

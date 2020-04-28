@@ -16,7 +16,7 @@
             }
         },
         {
-            "path": "pages/ranking-list/ranking-list",
+            "path": "pages/rank/rank",
             "style": {
                 "navigationBarTitleText": "宏鹏教育程序员美学摄影展",
                 "navigationBarBackgroundColor": "#9ccf5b",
@@ -89,28 +89,34 @@
         {
             "path": "pages/login/login",
             "style": {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "宏鹏教育程序员美学摄影展",
                 "navigationBarBackgroundColor": "#9ccf5b"
             }
         }
     ],
     "tabBar": {
         "color": "#353535",
-        "selectedColor": "#51aa37",
+        "selectedColor": "#31c9b2",
         "backgroundColor": "#ffffff",
         "borderStyle": "white",
         "list": [
             {
                 "pagePath": "pages/index/index",
-                "text": "首页"
+                "text": "首页",
+                "iconPath": "static/tabBar/home.png",
+                "selectedIconPath": "static/tabBar/home-c.png"
             },
             {
-                "pagePath": "pages/ranking-list/ranking-list",
-                "text": "排行榜"
+                "pagePath": "pages/rank/rank",
+                "text": "排行榜",
+                "iconPath": "static/tabBar/rank.png",
+                "selectedIconPath": "static/tabBar/rank-c.png"
             },
             {
                 "pagePath": "pages/about/about",
-                "text": "说明"
+                "text": "说明",
+                "iconPath": "static/tabBar/about.png",
+                "selectedIconPath": "static/tabBar/about-c.png"
             }
         ]
     },

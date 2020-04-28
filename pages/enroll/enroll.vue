@@ -32,7 +32,7 @@
                 <view v-if="images.length<3" class="img-btn" @click="imgUpload">+</view>
             </view>
         </view>
-        <button class="submit" @click="enrollSubmit">提交</button>
+        <button type="primary" class="submit" @click="enrollSubmit">提交</button>
     </view>
 </template>
 
@@ -242,12 +242,5 @@
         position: absolute;
         bottom: 2%;
         width: 96%;
-        color: #ffffff;
-        border: 1px solid #168b15;
-        background-color: #1bad1a;
-
-        &:after {
-            border: none;
-        }
     }
 </style>
