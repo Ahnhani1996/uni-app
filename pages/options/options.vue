@@ -34,9 +34,6 @@
                 ]
             }
         },
-        created() {
-            this.apiTest()
-        },
         methods: {
             intentToActivity() {
                 uni.navigateTo({
@@ -53,35 +50,6 @@
                     title: '温馨提示',
                     content: '正在努力开发中，敬请期待~'
                 })
-            },
-            apiTest() {
-                let that = this;
-                uni.login({
-                    success: (res) => {
-                        that.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/getAppid', {
-                            code: res.code
-                        }).then((res) => {
-                            console.log(res)
-                        })
-                    }
-                })
-                /*uni.getSetting({
-                    success(res) {
-                        uni.getUserInfo({
-                            success(res) {
-                                uni.login({
-                                    success: (res) => {
-                                        that.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/getAppid', {
-                                            code: res.code
-                                        }).then((res) => {
-                                            console.log(res)
-                                        })
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })*/
             }
         }
     }

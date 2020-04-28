@@ -85,6 +85,13 @@
                 "navigationBarTitleText": "",
                 "navigationBarBackgroundColor": "#9ccf5b"
             }
+        },
+        {
+            "path": "pages/login/login",
+            "style": {
+                "navigationBarTitleText": "",
+                "navigationBarBackgroundColor": "#9ccf5b"
+            }
         }
     ],
     "tabBar": {

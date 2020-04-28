@@ -3,7 +3,7 @@
         <swipers :background="imgUrls"></swipers>
         <view class="title">热门活动</view>
         <ul class="activity">
-            <li class="activity-item" @click="intentToIndex">
+            <li class="activity-item" @click="intentToLogin">
                 <view>1</view>
                 <view class="name">宏鹏教育程序员美学摄影展</view>
                 <view>6760</view>
@@ -16,6 +16,9 @@
     import swiper from "../../components/swiper";
 
     export default {
+        components: {
+            "swipers": swiper
+        },
         data() {
             return {
                 imgUrls: [
@@ -26,14 +29,21 @@
             }
         },
         methods: {
-            intentToIndex() {
-                uni.switchTab({
-                    url: '../index/index'
+            intentToLogin() {
+                uni.getStorage({
+                    key: 'userInfo',
+                    success(res) {
+                        uni.switchTab({
+                            url: '../index/index'
+                        })
+                    },
+                    fail(res) {
+                        uni.navigateTo({
+                            url: '../login/login'
+                        })
+                    }
                 })
             }
-        },
-        components: {
-            "swipers": swiper
         }
     }
 </script>

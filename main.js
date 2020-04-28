@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App'
-import Fly from 'flyio/dist/npm/wx';
+import Fly from 'flyio/dist/npm/wx'
 
 Vue.config.productionTip = false
 
@@ -14,6 +14,6 @@ app.$mount()
 const fly = new Fly()
 Vue.prototype.$fly = fly
 Vue.prototype.$fly.interceptors.request.use((config, promise) => {
-    config.headers["Content-Type"] = "application/x-www-form-urlencoded";
-    return config;
+    config.headers["Content-Type"] = "application/x-www-form-urlencoded"
+    return config
 })
