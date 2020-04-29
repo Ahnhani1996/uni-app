@@ -35,7 +35,6 @@
         methods: {
             getActivityList() {
                 this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/getActivityList').then(res => {
-                    console.log(res.data.data);
                     this.activityList = res.data.data;
                 })
             },
@@ -76,7 +75,7 @@
 
         .item {
             display: flex;
-            line-height: 2.2;
+            line-height: 2.8;
             border-bottom: 1px solid #ededed;
 
             .id {

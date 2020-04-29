@@ -8,7 +8,7 @@
             </view>
             <view class="item">
                 <view>{{sumVote}}</view>
-                <view>总报名</view>
+                <view>总投票</view>
             </view>
             <view class="item">
                 <view>{{browse}}</view>
@@ -19,7 +19,7 @@
         <view class="countdown">距离活动结束：{{countdown}}</view>
         <view class="search">
             <input type="text" placeholder="姓名" v-model="name">
-            <button>搜索</button>
+            <button @click="searchPlayer">搜索</button>
         </view>
         <view class="picker">
             <picker @change="selectSchool" :value="schoolIndex" :range="schoolArray">
@@ -70,10 +70,14 @@
                 schoolArray: ['选择分组'],
                 schoolIndex: "0",
                 players: [],
+                allPlayers: [],
+                allPlayersStatus: false,
                 backgroundMusicStatus: true,
                 total: 0,
                 index: 10,
-                name: ''
+                name: '',
+                newArr: [],
+
             }
         },
         onLoad() {
@@ -82,18 +86,18 @@
         created() {
             this.getIndexData();
             this.getActivityPlayer();
-            this.searchPlayer()
         },
         onReachBottom() {
             this.getActivityPlayer();
         },
         methods: {
             getCountdown(date) {
+                const formatTime = date.replace(/-/g, '/');
                 setInterval(() => {
                     //获取当前时间
                     let nowTime = new Date().getTime();
                     //获取截止时间
-                    let endTime = new Date(date).getTime();
+                    let endTime = new Date(formatTime).getTime();
                     //获取时间差
                     let difference = (endTime - nowTime) / 1000;
                     //时间差转换成时分秒
@@ -113,7 +117,23 @@
                 }, 1000)
             },
             selectSchool(e) {
-                this.schoolIndex = e.target.value
+                this.schoolIndex = e.target.value;
+                if (this.schoolIndex == 0) {
+                    this.players.splice(0, this.players.length);
+                    this.allPlayers.forEach(item => {
+                        this.players.push(item)
+                    })
+                } else {
+                    let arr = this.allPlayers.filter(item => {
+                        return item.groupName == this.schoolArray[this.schoolIndex]
+                    })
+                    this.total = arr.length;
+                    this.index = arr.length;
+                    this.players.splice(0, this.players.length);
+                    arr.forEach(item => {
+                        this.players.push(item)
+                    })
+                }
             },
             intentToEnroll() {
                 uni.navigateTo({
@@ -147,7 +167,6 @@
                 this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/list', {
                     activityId: 1
                 }).then(res => {
-                    //console.log(res.data.data);
                     res.data.data.coverList.forEach(data => {
                         this.imgUrls.push(data.url)
                     });
@@ -159,18 +178,26 @@
                 })
             },
             getActivityPlayer() {
-                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/activityPlayer', {
-                    'activityId': 1
-                }).then(res => {
-                    console.log(res.data);
-                    this.total = res.data.total;
-                    this.players = res.data.rows.splice(0, this.index);
-                    this.index += 10;
-                    res.data.rows.forEach(data => {
-                        this.schoolArray.push(data.groupName)
-                    });
-                    this.schoolArray = this.duplicateRemoval(this.schoolArray);
-                })
+                if (this.total !== this.index) {
+                    this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/activityPlayer', {
+                        'activityId': 1
+                    }).then(res => {
+                        if (this.allPlayersStatus == false) {
+                            this.total = res.data.total;
+                            this.players = res.data.rows.splice(0, this.index);
+                            this.allPlayers.push(...res.data.rows);
+                            this.allPlayersStatus = true;
+                            this.index += 10;
+                            res.data.rows.forEach(data => {
+                                this.schoolArray.push(data.groupName)
+                            });
+                            this.schoolArray = this.duplicateRemoval(this.schoolArray);
+                        } else {
+                            this.index += 10;
+                            this.players = res.data.rows.splice(0, this.index);
+                        }
+                    })
+                }
             },
             duplicateRemoval(arr) {
                 let newArray = []
@@ -184,9 +211,12 @@
             searchPlayer() {
                 this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/activityPlayer', {
                     'activityId': 1,
-                    'name': '张'
+                    'name': this.name
                 }).then(res => {
-                    console.log(res)
+                    this.schoolIndex = 0
+                    this.total = res.data.total;
+                    this.index = res.data.total;
+                    this.players = res.data.rows
                 })
             }
         }
