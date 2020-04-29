@@ -60,7 +60,7 @@
                                         success: res => {
                                             that.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/getAppid', {
                                                 code: res.code
-                                            }).then((res) => {
+                                            }).then(res => {
                                                 console.log(res)
                                             })
                                         }

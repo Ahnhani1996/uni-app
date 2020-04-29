@@ -3,22 +3,22 @@
         <swipers :background="imgUrls"></swipers>
         <view class="data">
             <view class="item">
-                <view class="num">{{enroll}}</view>
+                <view>{{enroll}}</view>
                 <view>已报名</view>
             </view>
             <view class="item">
-                <view class="num">{{sumVote}}</view>
+                <view>{{sumVote}}</view>
                 <view>总报名</view>
             </view>
             <view class="item">
-                <view class="num">{{browse}}</view>
+                <view>{{browse}}</view>
                 <view>浏览量</view>
             </view>
         </view>
         <button class="enroll-btn" @click="intentToEnroll">我要报名</button>
         <view class="countdown">距离活动结束：{{countdown}}</view>
         <view class="search">
-            <input type="text" placeholder="姓名">
+            <input type="text" placeholder="姓名" v-model="name">
             <button>搜索</button>
         </view>
         <view class="picker">
@@ -27,13 +27,18 @@
             </picker>
         </view>
         <view class="player">
-            <view class="player-item" v-for="(item,i) in playerArray" :key="i" @click="intentToVote">
-                <view class="id">编号:{{item.id}}</view>
-                <view class="img"></view>
+            <view class="item" v-for="(item,i) in players" :key="i" @click="intentToVote">
+                <view class="id">编号：{{item.id}}</view>
+                <view class="cover">
+                    <img :src="item.coverImg" alt="">
+                </view>
                 <view>{{item.name}}</view>
-                <view class="poll">{{item.poll}}票</view>
+                <view class="ticket">{{item.ticket}}票</view>
                 <button>投票</button>
             </view>
+        </view>
+        <view class="bottom" v-if="index>=total">
+            已经到底了~
         </view>
         <view class="music" @click="backgroundMusicControl">
             音乐
@@ -62,31 +67,25 @@
                 sumVote: 0,
                 browse: 0,
                 countdown: "",
-                schoolArray: [
-                    '选择分组',
-                    '北大青鸟鲁广校区',
-                    '北大青鸟光谷校区',
-                    '北大青鸟光谷学院',
-                    '课工场华中直营总校',
-                    '课工场徐东校区',
-                    '课工场光谷校区',
-                    '课工场郑州兰德校区',
-                    '北大青鸟徐东校区'
-                ],
+                schoolArray: ['选择分组'],
                 schoolIndex: "0",
-                playerArray: [
-                    {id: 50, name: '张三', poll: 10},
-                    {id: 100, name: '李四', poll: 15},
-                    {id: 1000, name: '王五', poll: 20}
-                ],
-                backgroundMusicStatus: true
+                players: [],
+                backgroundMusicStatus: true,
+                total: 0,
+                index: 10,
+                name: ''
             }
         },
         onLoad() {
             this.backgroundMusic();
         },
         created() {
-            this.getIndexData()
+            this.getIndexData();
+            this.getActivityPlayer();
+            this.searchPlayer()
+        },
+        onReachBottom() {
+            this.getActivityPlayer();
         },
         methods: {
             getCountdown(date) {
@@ -147,9 +146,9 @@
             getIndexData() {
                 this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/list', {
                     activityId: 1
-                }).then((res) => {
-                    console.log(res.data.data);
-                    res.data.data.coverList.forEach((data) => {
+                }).then(res => {
+                    //console.log(res.data.data);
+                    res.data.data.coverList.forEach(data => {
                         this.imgUrls.push(data.url)
                     });
                     this.enroll = res.data.data.hdActivity.enroll;
@@ -157,6 +156,37 @@
                     this.browse = res.data.data.hdActivity.browse;
                     this.getCountdown(res.data.data.hdActivity.end);
                     innerAudioContext.src = res.data.data.hdActivity.music;
+                })
+            },
+            getActivityPlayer() {
+                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/activityPlayer', {
+                    'activityId': 1
+                }).then(res => {
+                    console.log(res.data);
+                    this.total = res.data.total;
+                    this.players = res.data.rows.splice(0, this.index);
+                    this.index += 10;
+                    res.data.rows.forEach(data => {
+                        this.schoolArray.push(data.groupName)
+                    });
+                    this.schoolArray = this.duplicateRemoval(this.schoolArray);
+                })
+            },
+            duplicateRemoval(arr) {
+                let newArray = []
+                arr.forEach(item => {
+                    if (!newArray.includes(item)) {
+                        newArray.push(item)
+                    }
+                });
+                return newArray;
+            },
+            searchPlayer() {
+                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/activityPlayer', {
+                    'activityId': 1,
+                    'name': '张'
+                }).then(res => {
+                    console.log(res)
                 })
             }
         }
@@ -178,10 +208,6 @@
         .item {
             width: 33.3%;
             text-align: center;
-
-            .num {
-
-            }
         }
     }
 
@@ -254,7 +280,7 @@
         width: 96%;
         margin: 0 auto;
 
-        .player-item {
+        .item {
             width: 49%;
             background-color: #fefefe;
             position: relative;
@@ -280,13 +306,21 @@
                 position: absolute;
             }
 
-            .img {
+            .cover {
                 width: 100%;
-                min-height: 180px;
-                background-color: red;
+                padding-top: 100%;
+                position: relative;
+
+                img {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
             }
 
-            .poll {
+            .ticket {
                 color: #31c8b1;
             }
 
@@ -333,5 +367,11 @@
                 border: none;
             }
         }
+    }
+
+    .bottom {
+        color: #cbcbcb;
+        text-align: center;
+        line-height: 4;
     }
 </style>
