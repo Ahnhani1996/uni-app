@@ -216,7 +216,7 @@
                     this.schoolIndex = 0
                     this.total = res.data.total;
                     this.index = res.data.total;
-                    this.players = res.data.rows
+                    this.players = res.data.rows;
                 })
             }
         }
