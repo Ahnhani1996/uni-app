@@ -334,6 +334,7 @@
                 padding: 0 5px;
                 text-align: center;
                 position: absolute;
+                z-index: 998;
             }
 
             .cover {
