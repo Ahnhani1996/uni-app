@@ -30,7 +30,7 @@
 <style scoped lang="scss">
     .introduction {
         width: 90%;
-        margin: 0 auto;
+        margin: 2% auto;
         padding: 3%;
         background-color: #fefefe;
     }

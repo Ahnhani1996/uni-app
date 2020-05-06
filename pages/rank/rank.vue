@@ -8,7 +8,8 @@
             <view class="title">票数排行榜</view>
             <div class="playerGroup">
                 <div class="playerList">
-                    <div :class="['item','item'+(i+1)]" v-for="(item,i) in playerList" :key="i">
+                    <div :class="['item','item'+(i+1)]" v-for="(item,i) in playerList" :key="i"
+                         @click="intentToVote(item.id)">
                         <div class="no">NO.{{i+1}}</div>
                         <img class="avater" :src="item.coverImg" alt="">
                         <div class="name">{{item.name}}</div>
@@ -16,7 +17,7 @@
                     </div>
                 </div>
                 <div class="playerList1">
-                    <div class="item" v-for="(item,i) in playerList1" :key="i">
+                    <div class="item" v-for="(item,i) in playerList1" :key="i" @click="intentToVote(item.id)">
                         <img class="avater" :src="item.coverImg" alt="">
                         <div class="mid">
                             <div class="name">{{item.name}}</div>
@@ -68,6 +69,11 @@
                     //拼接倒计时
                     this.countdown = day + '天 ' + hours + '时 ' + minutes + '分 ' + seconds + '秒';
                 }, 1000)
+            },
+            intentToVote(id) {
+                uni.navigateTo({
+                    url: '../vote/vote?id=' + id
+                });
             },
             getPlayerRank() {
                 this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/playerRank', {

@@ -180,6 +180,8 @@
         color: #ffffff;
         background-color: #1bba0f;
         width: 100%;
+        height: 8%;
+        line-height: 3.1;
         border-radius: 0;
 
         &:after {

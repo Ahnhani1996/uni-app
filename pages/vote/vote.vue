@@ -31,18 +31,20 @@
             <view class="file">
                 <view class="title">选手照片</view>
                 <view class="coverImg">
-                    <image :src="player.coverImg" mode="widthFix">
+                    <image v-for="(item,i) in playerImg" :key="i" :src="item.url" mode="widthFix"></image>
                 </view>
             </view>
             <view class="file">
                 <view class="contribute">票数贡献榜</view>
-                <view class="hdPlayerGiftlist" v-if="hdPlayerGiftlist.length>0">
-                    <view class="item" v-for="(item,i) in hdPlayerGiftlist" :key="i">
-                        <img class="extend3" :src="item.extend3" alt="">
-                        <view class="name">{{item.extend2}}</view>
-                        <view class="ticket">{{item.ticket}}票</view>
+                <scroll-view scroll-y="true" style="height: 230px" v-if="hdPlayerGiftlist.length>0">
+                    <view class="hdPlayerGiftlist">
+                        <view class="item" v-for="(item,i) in hdPlayerGiftlist" :key="i">
+                            <img class="extend3" :src="item.extend3" alt="">
+                            <view class="name">{{item.extend2}}</view>
+                            <view class="ticket">{{item.ticket}}票</view>
+                        </view>
                     </view>
-                </view>
+                </scroll-view>
                 <view class="noHdPlayerGiftlist" v-else>
                     <view>喜欢我的人 在这里驻留</view>
                     <button>送ta礼物加票</button>
@@ -65,7 +67,8 @@
         data() {
             return {
                 hdPlayerGiftlist: [],
-                player: {}
+                player: {},
+                playerImg: []
             }
         },
         onLoad: function (option) {
@@ -90,6 +93,7 @@
                     console.log(res.data.data);
                     this.hdPlayerGiftlist = res.data.data.hdPlayerGiftlist;
                     this.player = res.data.data.player;
+                    this.playerImg = res.data.data.playerImg;
                 })
             }
         }
@@ -99,7 +103,7 @@
 <style lang="scss">
     page {
         background-color: #f9f9f9;
-        padding-bottom: 15%;
+        padding-bottom: 13%;
     }
 
     .vote {
@@ -162,6 +166,11 @@
 
                 image {
                     width: 100%;
+                    margin-bottom: 1%;
+
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
                 }
             }
 
@@ -235,7 +244,7 @@
             width: 33.3%;
             height: 80%;
             border-right: 1px solid #ededed;
-            padding-top: 5%;
+            line-height: 2.8;
 
             &:last-child {
                 border: none;
