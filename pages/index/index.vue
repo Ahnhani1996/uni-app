@@ -3,15 +3,15 @@
         <swipers :background="imgUrls"></swipers>
         <view class="data">
             <view class="item">
-                <view>{{enroll}}</view>
+                <view>{{hdActivity.enroll}}</view>
                 <view>已报名</view>
             </view>
             <view class="item">
-                <view>{{sumVote}}</view>
+                <view>{{hdActivity.sumVote}}</view>
                 <view>总投票</view>
             </view>
             <view class="item">
-                <view>{{browse}}</view>
+                <view>{{hdActivity.browse}}</view>
                 <view>浏览量</view>
             </view>
         </view>
@@ -63,9 +63,7 @@
         data() {
             return {
                 imgUrls: [],
-                enroll: 0,
-                sumVote: 0,
-                browse: 0,
+                hdActivity: {},
                 countdown: "",
                 schoolArray: ['选择分组'],
                 schoolIndex: "0",
@@ -168,9 +166,7 @@
                     res.data.data.coverList.forEach(data => {
                         this.imgUrls.push(data.url)
                     });
-                    this.enroll = res.data.data.hdActivity.enroll;
-                    this.sumVote = res.data.data.hdActivity.sumVote;
-                    this.browse = res.data.data.hdActivity.browse;
+                    this.hdActivity = res.data.data.hdActivity;
                     this.getCountdown(res.data.data.hdActivity.end);
                     innerAudioContext.src = res.data.data.hdActivity.music;
                 })
@@ -390,10 +386,12 @@
             text-align: center;
             font-size: 12px;
             background-color: #f5fefe;
-            border-bottom: 1px solid #c9ebf1;
+            border: 1px solid #c9ebf1;
+            border-left: none;
+            border-bottom: none;
 
             &:last-child {
-                border: none;
+                border-bottom: 1px solid #c9ebf1;
             }
         }
     }

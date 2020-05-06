@@ -9,6 +9,9 @@
                 <view class="browse">{{item.browse}}</view>
             </view>
         </view>
+        <view class="fixed">
+            <view @click="intentToOption">首页</view>
+        </view>
     </view>
 </template>
 
@@ -36,6 +39,11 @@
             getActivityList() {
                 this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/getActivityList').then(res => {
                     this.activityList = res.data.data;
+                })
+            },
+            intentToOption() {
+                uni.navigateTo({
+                    url: '../options/options'
                 })
             },
             intentToLogin() {
@@ -95,6 +103,25 @@
             .browse {
                 color: #c9c9c9;
             }
+        }
+    }
+
+    .fixed {
+        position: fixed;
+        left: 0;
+        top: 80%;
+        z-index: 999;
+
+        view {
+            width: 35px;
+            height: 35px;
+            line-height: 35px;
+            color: #8796b2;
+            text-align: center;
+            font-size: 12px;
+            background-color: #f5fefe;
+            border: 1px solid #c9ebf1;
+            border-left: none;
         }
     }
 </style>

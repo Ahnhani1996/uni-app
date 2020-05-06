@@ -36,7 +36,7 @@
             </view>
             <view class="file">
                 <view class="contribute">票数贡献榜</view>
-                <scroll-view scroll-y="true" style="height: 230px" v-if="hdPlayerGiftlist.length>0">
+                <scroll-view scroll-y="true" style="height: 265px" v-if="hdPlayerGiftlist.length>0">
                     <view class="hdPlayerGiftlist">
                         <view class="item" v-for="(item,i) in hdPlayerGiftlist" :key="i">
                             <img class="extend3" :src="item.extend3" alt="">
@@ -52,6 +52,17 @@
             </view>
             <view class="file">
                 <view class="title">投票记录</view>
+                <view class="ticket">
+                    <view class="item" v-for="(item,i) in playerTicket" :key="i">
+                        <view class="left">
+                            <view>{{item.extend2}}</view>
+                            <view>{{item.createTime}}</view>
+                        </view>
+                        <view class="extend3">+{{item.extend3}}</view>
+                    </view>
+                    <button v-if="playerTicket.length<total" @click="getPlayerTicket(id)">查看更多</button>
+                    <button v-else>没有更多了</button>
+                </view>
             </view>
         </view>
         <view class="tabBar">
@@ -66,13 +77,19 @@
     export default {
         data() {
             return {
+                id: 0,
                 hdPlayerGiftlist: [],
                 player: {},
-                playerImg: []
+                playerImg: [],
+                pageNum: 1,
+                playerTicket: [],
+                total: 0
             }
         },
         onLoad: function (option) {
-            this.getPlayerData(option.id)
+            this.id = option.id
+            this.getPlayerData(option.id);
+            this.getPlayerTicket(option.id);
         },
         methods: {
             intentToIndex() {
@@ -90,10 +107,22 @@
                     'activityId': 1,
                     'id': id
                 }).then(res => {
-                    console.log(res.data.data);
+                    //console.log(res.data.data);
                     this.hdPlayerGiftlist = res.data.data.hdPlayerGiftlist;
                     this.player = res.data.data.player;
                     this.playerImg = res.data.data.playerImg;
+                })
+            },
+            getPlayerTicket(id) {
+                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/playerTicket', {
+                    'playerId': id,
+                    'pageSize': 5,
+                    'pageNum': this.pageNum
+                }).then(res => {
+                    console.log(res.data);
+                    this.pageNum += 1
+                    this.playerTicket.push(...res.data.rows);
+                    this.total = res.data.total;
                 })
             }
         }
@@ -182,7 +211,7 @@
                     align-items: center;
                     border-bottom: 1px solid #ededed;
                     line-height: 50px;
-                    padding: 3% 0;
+                    padding: 1% 0;
 
                     &:last-child {
                         border-bottom: none;
@@ -197,7 +226,7 @@
                     }
 
                     .name {
-                        width: 60%;
+                        width: 65%;
                     }
 
                     .ticket {
@@ -221,6 +250,40 @@
                     border: none;
                     border-radius: 23px;
                     margin-bottom: 5%;
+
+                    &:after {
+                        border: none;
+                    }
+                }
+            }
+
+            .ticket {
+                padding: 2%;
+
+                .item {
+                    display: flex;
+                    align-items: center;
+                    line-height: 2;
+                    border-bottom: 1px solid #ededed;
+
+                    .left {
+                        width: 87.5%;
+
+                        view {
+                            padding-left: 5%;
+                        }
+                    }
+
+                    .extend3 {
+                        color: #31c8b1;
+                    }
+                }
+
+                button {
+                    color: #fff;
+                    border: none;
+                    margin-top: 2%;
+                    background-color: #32c8b1;
 
                     &:after {
                         border: none;
