@@ -1,11 +1,31 @@
 <template>
     <view>
         <view class="countdown">
-            <view>2020-06-01 00:00:00 结束</view>
+            <view>{{end}} 结束</view>
             距离截止剩余：{{countdown}}
         </view>
         <view class="rank">
             <view class="title">票数排行榜</view>
+            <div class="playerGroup">
+                <div class="playerList">
+                    <div :class="['item','item'+(i+1)]" v-for="(item,i) in playerList" :key="i">
+                        <div class="no">NO.{{i+1}}</div>
+                        <img class="avater" :src="item.coverImg" alt="">
+                        <div class="name">{{item.name}}</div>
+                        <div class="ticket">{{item.ticket}}票</div>
+                    </div>
+                </div>
+                <div class="playerList1">
+                    <div class="item" v-for="(item,i) in playerList1" :key="i">
+                        <img class="avater" :src="item.coverImg" alt="">
+                        <div class="mid">
+                            <div class="name">{{item.name}}</div>
+                            <div class="ticket">{{item.ticket}}票</div>
+                        </div>
+                        <div class="no">{{i+4}}</div>
+                    </div>
+                </div>
+            </div>
         </view>
     </view>
 </template>
@@ -14,14 +34,18 @@
     export default {
         data() {
             return {
-                countdown: ''
+                end: '',
+                countdown: '',
+                playerList: [],
+                playerList1: []
             }
         },
         onLoad() {
-            this.getCountdown('2020/06/01 00:00:00');
+            this.getPlayerRank();
         },
         methods: {
             getCountdown(date) {
+                const formatTime = date.replace(/-/g, '/');
                 setInterval(() => {
                     //获取当前时间
                     let nowTime = new Date().getTime();
@@ -44,6 +68,17 @@
                     //拼接倒计时
                     this.countdown = day + '天 ' + hours + '时 ' + minutes + '分 ' + seconds + '秒';
                 }, 1000)
+            },
+            getPlayerRank() {
+                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/playerRank', {
+                    'activityId': 1
+                }).then(res => {
+                    console.log(res.data.data);
+                    this.end = res.data.data.hdActivity.end;
+                    this.getCountdown(res.data.data.hdActivity.end);
+                    this.playerList.push(...res.data.data.playerList);
+                    this.playerList1.push(...res.data.data.playerList1);
+                })
             }
         }
     }
@@ -63,7 +98,7 @@
 
     .rank {
         width: 96%;
-        margin: 0 auto;
+        margin: 0 auto 2%;
 
         .title {
             color: #ffffff;
@@ -71,5 +106,103 @@
             text-align: center;
             background-color: #31c8b1;
         }
+
+        .playerGroup {
+            background-color: #fefefe;
+            padding: 2%;
+
+            .playerList {
+                position: relative;
+                display: flex;
+                padding: 6% 0 4%;
+                border-bottom: 1px solid #f4f4f4;
+
+                .item {
+                    width: 33%;
+                    text-align: center;
+
+                    .no {
+                        color: #fec433;
+                        margin-bottom: 5%;
+                    }
+
+                    .avater {
+                        width: 60px;
+                        height: 60px;
+                        border-radius: 50%;
+                        margin-bottom: 5%;
+                    }
+
+                    .name {
+                        color: #758697;
+                        margin-bottom: 5%;
+                    }
+
+                    .ticket {
+                        color: #31c8b1;
+                    }
+                }
+
+                .item1 {
+                    position: absolute;
+                    top: 12%;
+                    left: 33.3%;
+
+                    .no {
+                        display: none;
+                    }
+
+                    .avater {
+                        width: 70px;
+                        height: 70px;
+                        border: 2px solid #ffde85;
+                    }
+
+                    .name {
+                        font-weight: 700;
+                    }
+                }
+
+                .item3 {
+                    position: absolute;
+                    left: 66.6%;
+                }
+            }
+
+            .playerList1 {
+                .item {
+                    color: #758697;
+                    display: flex;
+                    padding: 4% 0 4% 4%;
+                    border-bottom: 1px solid #f4f4f4;
+
+                    &:last-child {
+                        border: none;
+                    }
+
+                    .avater {
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                        margin-right: 3%;
+                    }
+
+                    .mid {
+                        position: relative;
+                        width: 70%;
+
+                        .ticket {
+                            position: absolute;
+                            bottom: 0;
+                        }
+                    }
+
+                    .no {
+                        line-height: 50px;
+                    }
+                }
+            }
+        }
+
     }
 </style>

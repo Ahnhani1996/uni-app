@@ -27,7 +27,7 @@
             </picker>
         </view>
         <view class="player">
-            <view class="item" v-for="(item,i) in players" :key="i" @click="intentToVote">
+            <view class="item" v-for="(item,i) in players" :key="i" @click="intentToVote(item.id)">
                 <view class="id">编号：{{item.id}}</view>
                 <view class="cover">
                     <img :src="item.coverImg" alt="">
@@ -82,8 +82,6 @@
         },
         onLoad() {
             this.backgroundMusic();
-        },
-        created() {
             this.getIndexData();
             this.getActivityPlayer();
         },
@@ -158,9 +156,9 @@
                     url: '../activity/activity'
                 });
             },
-            intentToVote() {
+            intentToVote(id) {
                 uni.navigateTo({
-                    url: '../vote/vote'
+                    url: '../vote/vote?id=' + id
                 });
             },
             getIndexData() {
