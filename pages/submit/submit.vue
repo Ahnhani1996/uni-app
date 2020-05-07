@@ -40,6 +40,9 @@
     import logo from "../../components/logo";
 
     export default {
+        components: {
+            logo
+        },
         data() {
             const currentDate = this.getDate({
                 format: true
@@ -115,9 +118,6 @@
                     url: '../lottery/lottery'
                 });
             }
-        },
-        components: {
-            logo
         }
     }
 </script>

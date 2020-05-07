@@ -32,7 +32,7 @@
                 activityList: []
             }
         },
-        created() {
+        onLoad() {
             this.getActivityList();
         },
         methods: {

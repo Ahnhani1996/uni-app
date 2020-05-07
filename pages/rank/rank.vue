@@ -6,27 +6,27 @@
         </view>
         <view class="rank">
             <view class="title">票数排行榜</view>
-            <div class="playerGroup">
-                <div class="playerList">
-                    <div :class="['item','item'+(i+1)]" v-for="(item,i) in playerList" :key="i"
-                         @click="intentToVote(item.id)">
-                        <div class="no">NO.{{i+1}}</div>
+            <view class="playerGroup">
+                <view class="playerList">
+                    <view :class="['item','item'+(i+1)]" v-for="(item,i) in playerList" :key="i"
+                          @click="intentToVote(item.id)">
+                        <view class="no">NO.{{i+1}}</view>
+                        <image class="avater" :src="item.coverImg"></image>
+                        <view class="name">{{item.name}}</view>
+                        <view class="ticket">{{item.ticket}}票</view>
+                    </view>
+                </view>
+                <view class="playerList1">
+                    <view class="item" v-for="(item,i) in playerList1" :key="i" @click="intentToVote(item.id)">
                         <img class="avater" :src="item.coverImg" alt="">
-                        <div class="name">{{item.name}}</div>
-                        <div class="ticket">{{item.ticket}}票</div>
-                    </div>
-                </div>
-                <div class="playerList1">
-                    <div class="item" v-for="(item,i) in playerList1" :key="i" @click="intentToVote(item.id)">
-                        <img class="avater" :src="item.coverImg" alt="">
-                        <div class="mid">
-                            <div class="name">{{item.name}}</div>
-                            <div class="ticket">{{item.ticket}}票</div>
-                        </div>
-                        <div class="no">{{i+4}}</div>
-                    </div>
-                </div>
-            </div>
+                        <view class="mid">
+                            <view class="name">{{item.name}}</view>
+                            <view class="ticket">{{item.ticket}}票</view>
+                        </view>
+                        <view class="no">{{i+4}}</view>
+                    </view>
+                </view>
+            </view>
         </view>
     </view>
 </template>

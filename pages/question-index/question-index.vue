@@ -15,6 +15,9 @@
     import logo from "../../components/logo";
 
     export default {
+        components: {
+            logo
+        },
         data() {
             return {}
         },
@@ -24,9 +27,6 @@
                     url: '../question-item/question-item?index=0'
                 })
             }
-        },
-        components: {
-            logo
         }
     }
 </script>

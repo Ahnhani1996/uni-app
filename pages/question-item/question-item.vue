@@ -40,12 +40,21 @@
     import logo from "../../components/logo";
 
     export default {
+        components: {
+            logo
+        },
         data() {
             return {
                 index: 0,
                 length: 0,
                 question: {}
             }
+        },
+        onLoad(option) {
+            this.index = option.index;
+            this.length = getApp().globalData.questionArray.length;
+            this.question = getApp().globalData.questionArray[option.index];
+            console.log(this.question)
         },
         methods: {
             nextQuestion() {
@@ -80,15 +89,6 @@
                 getApp().globalData.answer.splice(this.index, 1);
                 getApp().globalData.answer.splice(this.index, 0, {value: e.target.value});
             }
-        },
-        onLoad(option) {
-            this.index = option.index;
-            this.length = getApp().globalData.questionArray.length;
-            this.question = getApp().globalData.questionArray[option.index];
-            console.log(this.question)
-        },
-        components: {
-            logo
         }
     }
 </script>

@@ -11,7 +11,7 @@
                 introduction: ''
             }
         },
-        created() {
+        onLoad() {
             this.getIndexData();
         },
         methods: {
