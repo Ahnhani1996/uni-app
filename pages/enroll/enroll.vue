@@ -8,7 +8,7 @@
             </view>
             <view class="item">
                 <view class="title">手机号</view>
-                <input type="digit" placeholder="请输入手机号" v-model="phone">
+                <input type="digit" placeholder="请输入手机号" v-model="tel">
             </view>
             <view class="item">
                 <view class="title">分组</view>
@@ -16,10 +16,10 @@
                     {{schoolArray[schoolIndex]}}
                 </picker>
             </view>
-            <view class="item intro">
-                <view class="title intro-title">选手描述</view>
+            <view class="item des">
+                <view class="title des-title">选手描述</view>
                 <textarea auto-height="true" disable-default-padding="true"
-                          placeholder="请输入选手描述" v-model="introduction"></textarea>
+                          placeholder="请输入选手描述" v-model="describes"></textarea>
             </view>
         </view>
         <view class="img-upload">
@@ -41,8 +41,8 @@
         data() {
             return {
                 name: '',
-                phone: '',
-                introduction: '',
+                tel: '',
+                describes: '',
                 schoolArray: [
                     '全部',
                     '北大青鸟鲁广校区',
@@ -67,6 +67,7 @@
                     count: 1,
                     success: res => {
                         this.images = this.images.concat(res.tempFilePaths)
+                        console.log(this.images)
                     }
                 })
             },
@@ -102,14 +103,14 @@
                     });
                     return false;
                 }
-                if (this.phone === '') {
+                if (this.tel === '') {
                     uni.showToast({
                         title: '手机号不能为空',
                         icon: 'none',
                         duration: 2000
                     });
                     return false;
-                } else if (phoneReg.test(this.phone) === false) {
+                } else if (phoneReg.test(this.tel) === false) {
                     uni.showToast({
                         title: '手机号格式错误',
                         icon: 'none',
@@ -117,6 +118,17 @@
                     });
                     return false;
                 }
+            },
+            enrollClickEvent() {
+                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/add', {
+                    'activityId': 1,
+                    'name': this.name,
+                    'tel': this.tel,
+                    'describes': this.describes,
+                    'pics': '',
+                    'extend1': 'extend1',
+                    'groupId': null
+                })
             }
         }
     }
@@ -175,10 +187,10 @@
         }
     }
 
-    .intro {
+    .des {
         margin-top: 2%;
 
-        .intro-title {
+        .des-title {
             line-height: 1;
             padding-top: 8px;
         }

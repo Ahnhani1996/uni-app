@@ -119,7 +119,7 @@
                     'pageSize': 5,
                     'pageNum': this.pageNum
                 }).then(res => {
-                    console.log(res.data);
+                    //console.log(res.data);
                     this.pageNum += 1
                     this.playerTicket.push(...res.data.rows);
                     this.total = res.data.total;
