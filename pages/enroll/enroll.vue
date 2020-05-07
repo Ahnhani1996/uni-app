@@ -40,29 +40,26 @@
     export default {
         data() {
             return {
+                userInfo: -1,
                 name: '',
                 tel: '',
                 describes: '',
-                schoolArray: [
-                    '全部',
-                    '北大青鸟鲁广校区',
-                    '北大青鸟光谷校区',
-                    '北大青鸟光谷学院',
-                    '课工场华中直营总校',
-                    '课工场徐东校区',
-                    '课工场光谷校区',
-                    '课工场郑州兰德校区',
-                    '北大青鸟徐东校区'
-                ],
+                schoolArray: ['全部'],
                 schoolIndex: '0',
+                schoolIdArray: [],
+                schoolId: '',
                 images: [],
                 pics: [],
                 picString: ''
             }
         },
+        onLoad() {
+            this.getGroupList()
+        },
         methods: {
             selectSchool(e) {
                 this.schoolIndex = e.target.value;
+                this.schoolId = this.schoolIdArray[parseInt(e.target.value) - 1];
             },
             imgUpload() {
                 uni.chooseImage({
@@ -78,7 +75,7 @@
                     filePath: imgPath,
                     encoding: 'base64',
                     success: res => {
-                        this.pics = this.pics.concat('data:image/jpeg;base64,' + res.data);
+                        this.pics.push({img: 'data:image/png;base64,' + res.data});
                         this.picString = JSON.stringify(this.pics)
                     }
                 })
@@ -97,22 +94,40 @@
                     }
                 })
             },
+            getGroupList() {
+                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/groupList', {
+                    activityId: 1
+                }).then(res => {
+                    console.log(res.data.data);
+                    res.data.data.groupList.forEach(data => {
+                        this.schoolArray.push(data.name);
+                        this.schoolIdArray.push(data.id);
+                    })
+                    this.userInfo = res.data.data.hdActivity.audit
+                })
+            },
             enrollClickEvent() {
                 const nameReg = /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/;
                 const phoneReg = /^1[3456789]\d{9}$/;
+                let extend1;
+                if (this.userInfo === 1) {
+                    extend1 = 0
+                } else {
+                    extend1 = 1
+                }
                 if (this.name === '') {
                     uni.showToast({
                         title: '用户名不能为空',
                         icon: 'none',
                         duration: 2000
-                    })
+                    });
                     return false;
                 } else if (nameReg.test(this.name) === false) {
                     uni.showToast({
                         title: '用户名格式错误',
                         icon: 'none',
                         duration: 2000
-                    })
+                    });
                     return false;
                 }
                 if (this.tel === '') {
@@ -120,21 +135,21 @@
                         title: '手机号不能为空',
                         icon: 'none',
                         duration: 2000
-                    })
+                    });
                     return false;
                 } else if (phoneReg.test(this.tel) === false) {
                     uni.showToast({
                         title: '手机号格式错误',
                         icon: 'none',
                         duration: 2000
-                    })
+                    });
                     return false;
                 } else if (this.pics.length <= 0) {
                     uni.showToast({
                         title: '至少上传一张图片',
                         icon: 'none',
                         duration: 2000
-                    })
+                    });
                     return false;
                 } else {
                     this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/add', {
@@ -142,9 +157,9 @@
                         name: this.name,
                         tel: this.tel,
                         describes: this.describes,
-                        pics: this.pics,
+                        pics: this.picString,
                         extend1: extend1,
-                        groupId: ''
+                        groupId: this.schoolId
                     }).then(res => {
                         console.log(res.data)
                     })
