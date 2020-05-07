@@ -104,8 +104,8 @@
             },
             getPlayerData(id) {
                 this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/player', {
-                    'activityId': 1,
-                    'id': id
+                    activityId: 1,
+                    id: id
                 }).then(res => {
                     //console.log(res.data.data);
                     this.hdPlayerGiftlist = res.data.data.hdPlayerGiftlist;
@@ -115,9 +115,9 @@
             },
             getPlayerTicket(id) {
                 this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/playerTicket', {
-                    'playerId': id,
-                    'pageSize': 5,
-                    'pageNum': this.pageNum
+                    playerId: id,
+                    pageSize: 5,
+                    pageNum: this.pageNum
                 }).then(res => {
                     //console.log(res.data);
                     this.pageNum += 1

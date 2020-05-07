@@ -77,7 +77,7 @@
             },
             getPlayerRank() {
                 this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/playerRank', {
-                    'activityId': 1
+                    activityId: 1
                 }).then(res => {
                     console.log(res.data.data);
                     this.end = res.data.data.hdActivity.end;

@@ -8,7 +8,7 @@
             </view>
             <view class="item">
                 <view class="title">手机号</view>
-                <input type="digit" placeholder="请输入手机号" v-model="tel">
+                <input type="digit" placeholder="请输入手机号" v-model.number="tel">
             </view>
             <view class="item">
                 <view class="title">分组</view>
@@ -32,7 +32,7 @@
                 <view v-if="images.length<3" class="img-btn" @click="imgUpload">+</view>
             </view>
         </view>
-        <button type="primary" class="submit" @click="enrollSubmit">提交</button>
+        <button type="primary" class="submit" @click="enrollClickEvent">提交</button>
     </view>
 </template>
 
@@ -54,20 +54,32 @@
                     '课工场郑州兰德校区',
                     '北大青鸟徐东校区'
                 ],
-                schoolIndex: "0",
-                images: []
+                schoolIndex: '0',
+                images: [],
+                pics: [],
+                picString: ''
             }
         },
         methods: {
             selectSchool(e) {
-                this.schoolIndex = e.target.value
+                this.schoolIndex = e.target.value;
             },
             imgUpload() {
                 uni.chooseImage({
                     count: 1,
                     success: res => {
-                        this.images = this.images.concat(res.tempFilePaths)
-                        console.log(this.images)
+                        this.images = this.images.concat(res.tempFilePaths[0]);
+                        this.imgToBase64(res.tempFilePaths[0]);
+                    }
+                })
+            },
+            imgToBase64(imgPath) {
+                uni.getFileSystemManager().readFile({
+                    filePath: imgPath,
+                    encoding: 'base64',
+                    success: res => {
+                        this.pics = this.pics.concat('data:image/jpeg;base64,' + res.data);
+                        this.picString = JSON.stringify(this.pics)
                     }
                 })
             },
@@ -85,7 +97,7 @@
                     }
                 })
             },
-            enrollSubmit() {
+            enrollClickEvent() {
                 const nameReg = /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/;
                 const phoneReg = /^1[3456789]\d{9}$/;
                 if (this.name === '') {
@@ -93,14 +105,14 @@
                         title: '用户名不能为空',
                         icon: 'none',
                         duration: 2000
-                    });
+                    })
                     return false;
                 } else if (nameReg.test(this.name) === false) {
                     uni.showToast({
                         title: '用户名格式错误',
                         icon: 'none',
                         duration: 2000
-                    });
+                    })
                     return false;
                 }
                 if (this.tel === '') {
@@ -108,27 +120,35 @@
                         title: '手机号不能为空',
                         icon: 'none',
                         duration: 2000
-                    });
+                    })
                     return false;
                 } else if (phoneReg.test(this.tel) === false) {
                     uni.showToast({
                         title: '手机号格式错误',
                         icon: 'none',
                         duration: 2000
-                    });
+                    })
                     return false;
+                } else if (this.pics.length <= 0) {
+                    uni.showToast({
+                        title: '至少上传一张图片',
+                        icon: 'none',
+                        duration: 2000
+                    })
+                    return false;
+                } else {
+                    this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/add', {
+                        activityId: 1,
+                        name: this.name,
+                        tel: this.tel,
+                        describes: this.describes,
+                        pics: this.pics,
+                        extend1: extend1,
+                        groupId: ''
+                    }).then(res => {
+                        console.log(res.data)
+                    })
                 }
-            },
-            enrollClickEvent() {
-                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/add', {
-                    'activityId': 1,
-                    'name': this.name,
-                    'tel': this.tel,
-                    'describes': this.describes,
-                    'pics': '',
-                    'extend1': 'extend1',
-                    'groupId': null
-                })
             }
         }
     }

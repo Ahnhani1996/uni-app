@@ -174,7 +174,7 @@
             getActivityPlayer() {
                 if (this.total !== this.index) {
                     this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/activityPlayer', {
-                        'activityId': 1
+                        activityId: 1
                     }).then(res => {
                         if (this.allPlayersStatus == false) {
                             this.total = res.data.total;
@@ -204,8 +204,8 @@
             },
             searchPlayer() {
                 this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/activityPlayer', {
-                    'activityId': 1,
-                    'name': this.name
+                    activityId: 1,
+                    name: this.name
                 }).then(res => {
                     this.schoolIndex = 0
                     this.total = res.data.total;
