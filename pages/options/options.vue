@@ -41,7 +41,7 @@
                 })
             },
             intentToQuestion() {
-                uni.navigateTo({
+                uni.redirectTo({
                     url: '../question-index/question-index'
                 })
             },

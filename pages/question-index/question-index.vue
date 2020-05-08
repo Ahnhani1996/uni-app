@@ -21,9 +21,12 @@
         data() {
             return {}
         },
+        onLoad() {
+            getApp().globalData.index = 0;
+        },
         methods: {
             intentToQuestionItem() {
-                uni.navigateTo({
+                uni.redirectTo({
                     url: '../question-item/question-item?index=0'
                 })
             }

@@ -12,14 +12,13 @@
             </view>
             <view class="form-item">
                 <view class="title">电话：</view>
-                <input type="text" v-model="phone">
+                <input type="text" v-model.number="tel">
             </view>
             <view class="form-item">
                 <view class="title">性别：</view>
-                <radio-group>
-                    <label v-for="(item, index) in gender" :key="item">
-                        <radio :value="item"></radio>
-                        {{item}}
+                <radio-group @change="radioChange">
+                    <label v-for="(item, i) in gender" :key="i">
+                        <radio :value="item.value">{{item.name}}</radio>
                     </label>
                 </radio-group>
             </view>
@@ -49,8 +48,12 @@
             })
             return {
                 name: '',
-                phone: '',
-                gender: ['男', '女'],
+                tel: '',
+                gender: [
+                    {id: 1, value: '1', name: '男'},
+                    {id: 1, value: '0', name: '女'}
+                ],
+                sex: '',
                 date: currentDate
             }
         },
@@ -68,7 +71,6 @@
                 let year = date.getFullYear();
                 let month = date.getMonth() + 1;
                 let day = date.getDate();
-
                 if (type === 'start') {
                     year = year - 60;
                 } else if (type === 'end') {
@@ -80,6 +82,11 @@
             },
             dateChange: function (e) {
                 this.date = e.target.value
+                console.log(this.date)
+            },
+            radioChange(e) {
+                this.sex = e.target.value
+                console.log(this.sex)
             },
             intentToLottery() {
                 const nameReg = /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/;
@@ -99,14 +106,14 @@
                     });
                     return false;
                 }
-                if (this.phone === '') {
+                if (this.tel === '') {
                     uni.showToast({
                         title: '手机号不能为空',
                         icon: 'none',
                         duration: 2000
                     });
                     return false;
-                } else if (phoneReg.test(this.phone) === false) {
+                } else if (phoneReg.test(this.tel) === false) {
                     uni.showToast({
                         title: '手机号格式错误',
                         icon: 'none',
@@ -114,9 +121,46 @@
                     });
                     return false;
                 }
-                uni.navigateTo({
-                    url: '../lottery/lottery'
-                });
+                if (this.sex === '') {
+                    uni.showToast({
+                        title: '选择你的性别',
+                        icon: 'none',
+                        duration: 2000
+                    });
+                    return false;
+                }
+                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/addHdInfogiftlog', {
+                    questionnaireId: 2,
+                    name: this.name,
+                    cause: getApp().globalData.cause,
+                    lesson: getApp().globalData.cause,
+                    advantage: getApp().globalData.advantage,
+                    place: getApp().globalData.place,
+                    changee: getApp().globalData.changee,
+                    satisfaction: getApp().globalData.satisfaction,
+                    negativeComment: '',
+                    education: getApp().globalData.education,
+                    current: getApp().globalData.current,
+                    sex: this.sex,
+                    birthday: this.date,
+                    tel: this.tel
+                }).then(res => {
+                    console.log(res);
+                    if (res.data.success === true) {
+                        uni.showModal({
+                            title: '提示',
+                            content: '进入抽奖',
+                            showCancel: false,
+                            success: function (res) {
+                                if (res.confirm) {
+                                    uni.reLaunch({
+                                        url: '../lottery/lottery'
+                                    });
+                                }
+                            }
+                        })
+                    }
+                })
             }
         }
     }

@@ -162,6 +162,26 @@
                         groupId: this.schoolId
                     }).then(res => {
                         console.log(res.data)
+                        if (res.data.code === 0) {
+                            uni.showModal({
+                                title: '提示',
+                                content: '本活动报名须进行资料审核，请您耐心等待',
+                                showCancel: false,
+                                success: function (res) {
+                                    if (res.confirm) {
+                                        uni.reLaunch({
+                                            url: '../index/index'
+                                        })
+                                    }
+                                }
+                            })
+                        } else {
+                            uni.showToast({
+                                title: res.data.msg,
+                                icon: 'none',
+                                duration: 2000
+                            });
+                        }
                     })
                 }
             }
