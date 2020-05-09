@@ -10,7 +10,7 @@
             return {}
         },
         onLoad() {
-            this.checkOpenId();
+            //this.checkOpenId();
         },
         methods: {
             bindGetUserInfo(e) {
@@ -25,12 +25,15 @@
                             if (res.authSetting['scope.userInfo']) {
                                 uni.getUserInfo({
                                     success(res) {
+                                        console.log(res.userInfo.nickName)
+                                        uni.setStorageSync('nickName', res.userInfo.nickName);
                                         uni.login({
                                             success: res => {
                                                 that.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/getAppid', {
                                                     code: res.code
                                                 }).then((res) => {
                                                     console.log(res);
+                                                    uni.setStorageSync('userInfo', res.data.data.openid);
                                                     uni.switchTab({
                                                         url: '../index/index'
                                                     })

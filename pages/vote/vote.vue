@@ -39,7 +39,7 @@
                 <scroll-view scroll-y="true" style="height: 265px" v-if="hdPlayerGiftlist.length>0">
                     <view class="hdPlayerGiftlist">
                         <view class="item" v-for="(item,i) in hdPlayerGiftlist" :key="i">
-                            <img class="extend3" :src="item.extend3" alt="">
+                            <image class="extend3" :src="item.extend3"/>
                             <view class="name">{{item.extend2}}</view>
                             <view class="ticket">{{item.ticket}}票</view>
                         </view>
@@ -67,7 +67,7 @@
         </view>
         <view class="tabBar">
             <view @click="intentToIndex">首页</view>
-            <view>投票</view>
+            <view @click="voteClickEvent">投票</view>
             <view @click="intentToGift">送礼</view>
         </view>
     </view>
@@ -99,7 +99,7 @@
             },
             intentToGift() {
                 uni.navigateTo({
-                    url: '../gift/gift'
+                    url: '../gift/gift?id=' + this.id
                 });
             },
             getPlayerData(id) {
@@ -107,7 +107,7 @@
                     activityId: 1,
                     id: id
                 }).then(res => {
-                    //console.log(res.data.data);
+                    console.log(res.data.data);
                     this.hdPlayerGiftlist = res.data.data.hdPlayerGiftlist;
                     this.player = res.data.data.player;
                     this.playerImg = res.data.data.playerImg;
@@ -123,6 +123,19 @@
                     this.pageNum += 1
                     this.playerTicket.push(...res.data.rows);
                     this.total = res.data.total;
+                })
+            },
+            voteClickEvent() {
+                const nickName = uni.getStorageSync('nickName');
+                const userInfo = uni.getStorageSync('userInfo');
+                console.log(nickName)
+                this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/vote', {
+                    extend1: userInfo,
+                    extend2: nickName,
+                    extend3: 1,
+                    playerId: this.id
+                }).then(res => {
+                    console.log(res)
                 })
             }
         }
