@@ -27,10 +27,14 @@
     }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
+    page {
+        padding-bottom: 2%;
+    }
+
     .introduction {
         width: 90%;
-        margin: 2% auto;
+        margin: 2% auto 0;
         padding: 3%;
         background-color: #fefefe;
     }

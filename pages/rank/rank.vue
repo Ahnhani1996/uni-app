@@ -115,8 +115,8 @@
 
         .playerGroup {
             background-color: #fefefe;
-            padding: 2%;
-
+            padding: 2% 2% 0 2%;
+            
             .playerList {
                 position: relative;
                 display: flex;

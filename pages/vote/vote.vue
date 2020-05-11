@@ -107,7 +107,6 @@
                     activityId: 1,
                     id: id
                 }).then(res => {
-                    console.log(res.data.data);
                     this.hdPlayerGiftlist = res.data.data.hdPlayerGiftlist;
                     this.player = res.data.data.player;
                     this.playerImg = res.data.data.playerImg;
@@ -119,23 +118,28 @@
                     pageSize: 5,
                     pageNum: this.pageNum
                 }).then(res => {
-                    //console.log(res.data);
                     this.pageNum += 1
                     this.playerTicket.push(...res.data.rows);
                     this.total = res.data.total;
                 })
             },
             voteClickEvent() {
+                const openid = uni.getStorageSync('openid');
                 const nickName = uni.getStorageSync('nickName');
-                const userInfo = uni.getStorageSync('userInfo');
-                console.log(nickName)
                 this.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/vote', {
-                    extend1: userInfo,
+                    extend1: openid,
                     extend2: nickName,
                     extend3: 1,
                     playerId: this.id
                 }).then(res => {
                     console.log(res)
+                    if (res.data.message == '处理成功') {
+                        uni.showToast({
+                            title: '投票成功',
+                            icon: 'none',
+                            duration: 2000
+                        });
+                    }
                 })
             }
         }

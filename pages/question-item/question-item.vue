@@ -11,8 +11,8 @@
                         {{item.name}}
                     </radio>
                 </label>
-                <textarea class="text-type1" v-if="showStatus" auto-height="true" disable-default-padding="true"
-                          placeholder="请提出您宝贵的意见" @blur="textareaBulr"></textarea>
+                <!--<textarea class="text-type1" v-if="showStatus" auto-height="true" disable-default-padding="true"
+                          placeholder="请提出您宝贵的意见" @blur="textareaBulr"></textarea>-->
             </radio-group>
         </view>
         <!--多选-->
@@ -25,8 +25,8 @@
                         {{item.name}}
                     </checkbox>
                 </label>
-                <textarea class="text-type1" v-if="showStatus" auto-height="true" disable-default-padding="true"
-                          placeholder="请提出您宝贵的意见" @blur="textareaBulr"></textarea>
+                <!--<textarea class="text-type1" v-if="showStatus" auto-height="true" disable-default-padding="true"
+                          placeholder="请提出您宝贵的意见" @blur="textareaBulr"></textarea>-->
             </checkbox-group>
         </view>
         <!--填空-->
@@ -192,6 +192,7 @@
 <style lang="scss">
     page {
         background-color: #fefefe;
+        padding-bottom: 3%;
     }
 
     .question {
@@ -245,7 +246,7 @@
     .next-btn {
         width: 50%;
         color: #ffffff;
-        margin: 0 auto 2%;
+        margin: 0 auto;
         background-color: #1aad19;
         border: 1px solid #168a15;
 

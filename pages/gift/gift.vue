@@ -100,7 +100,6 @@
                     activityId: 1,
                     id: this.id
                 }).then(res => {
-                    console.log(res.data.data);
                     this.giftList = res.data.data.hdGift
                 })
             },
