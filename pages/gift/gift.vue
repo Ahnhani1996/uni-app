@@ -32,17 +32,17 @@
                         </view>
                         {{item.name}}
                     </view>
-                    <view class="poll">+{{item.ticket}}票</view>
+                    <view class="ticket">+{{item.ticket}}票</view>
                 </view>
             </view>
-            <view class="count">
+            <view class="quantity">
                 <view class="num">
                     <view class="price">￥{{price}}</view>
-                    <view class="poll">+{{poll}}票</view>
+                    <view class="ticket">+{{ticket}}票</view>
                 </view>
                 <view class="btn">
                     <button @click="reduceGift">-</button>
-                    <view>{{count}}</view>
+                    <view>{{quantity}}</view>
                     <button @click="incrementGift">+</button>
                 </view>
             </view>
@@ -58,31 +58,23 @@
                 id: 0,
                 player: {},
                 giftList: [
-                    {id: 1, name: '棒棒糖', price: 0.01, poll: 20},
-                    {id: 2, name: '花花', price: 18, poll: 65},
-                    {id: 3, name: '么么哒', price: 25, poll: 99},
-                    {id: 4, name: '666', price: 50, poll: 240},
-                    {id: 5, name: '告白气球', price: 98, poll: 550},
-                    {id: 6, name: '小心心', price: 168, poll: 1000},
-                    {id: 7, name: '神灯', price: 258, poll: 2188},
-                    {id: 8, name: '皇冠', price: 328, poll: 2888},
-                    {id: 9, name: '宝箱', price: 648, poll: 6888},
+                    {price: 0}
                 ],
                 currentSelected: 0,
-                count: 1
+                quantity: 1
             }
         },
         computed: {
             price: {
                 get() {
-                    return this.giftList[this.currentSelected].price * this.count;
+                    return this.giftList[this.currentSelected].price * this.quantity;
                 },
                 set(val) {
                 }
             },
-            poll: {
+            ticket: {
                 get() {
-                    return this.poll = this.giftList[this.currentSelected].ticket * this.count;
+                    return this.ticket = this.giftList[this.currentSelected].ticket * this.quantity;
                 },
                 set(val) {
                 }
@@ -114,20 +106,54 @@
             },
             selectGift(index) {
                 this.currentSelected = index;
-                this.count = 1
+                this.quantity = 1
             },
             incrementGift() {
-                this.count += 1;
+                this.quantity += 1;
             },
             reduceGift() {
-                if (this.count >= 2) {
-                    this.count -= 1;
+                if (this.quantity >= 2) {
+                    this.quantity -= 1;
                 }
             },
             sendBtnClickEvent() {
+                const that = this;
+                const total_fee = this.price * 100;
+                const openid = uni.getStorageSync('openid');
+                const userInfo = uni.getStorageSync('userInfo');
                 uni.login({
                     success: res => {
-                        this.$fly.post()
+                        that.$fly.post('https://mp.zymcloud.com/hp-hd/applet/pay/wxMiniProgramPay', {
+                            total_fee: total_fee,
+                            js_code: res.code
+                        }).then(res => {
+                            if (res.data.code == 0) {
+                                uni.requestPayment({
+                                    nonceStr: res.data.data.nonceStr,
+                                    package: res.data.data.package,
+                                    paySign: res.data.data.paySign,
+                                    signType: res.data.data.signType,
+                                    timeStamp: res.data.data.timeStamp,
+                                    success: function (res) {
+                                        that.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/giftVote', {
+                                            extend1: openid,
+                                            extend2: userInfo.nickName,
+                                            extend3: userInfo.avatarUrl,
+                                            playerId: that.id,
+                                            giftId: that.giftList[that.currentSelected].id,
+                                            quantity: that.quantity,
+                                            amount: that.price,
+                                            ticket: that.ticket,
+                                            activityId: 1
+                                        }).then(res => {
+                                            console.log(res);
+                                        }).catch(err => {
+                                            console.log(err);
+                                        })
+                                    }
+                                })
+                            }
+                        })
                     }
                 })
             }
@@ -195,7 +221,7 @@
                 margin: 2.5% 0 0 2.5%;
                 border-bottom: 2px solid #92c341;
 
-                .poll {
+                .ticket {
                     background-color: #b3e657;
                 }
 
@@ -219,7 +245,7 @@
             }
         }
 
-        .count {
+        .quantity {
             display: flex;
             justify-content: space-between;
             padding: 2.5%;
@@ -234,7 +260,7 @@
                     font-size: 18px;
                 }
 
-                .poll {
+                .ticket {
                     font-size: 14px;
                 }
             }

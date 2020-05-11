@@ -14,26 +14,22 @@
         },
         methods: {
             bindGetUserInfo(e) {
+                //用户授权，存储userInfo
                 if (e.detail.userInfo) {
-                    uni.setStorage({
-                        key: 'userInfo',
-                        data: e.detail.userInfo
-                    });
+                    uni.setStorageSync('userInfo', e.detail.userInfo);
                     const that = this;
                     uni.getSetting({
                         success(res) {
                             if (res.authSetting['scope.userInfo']) {
                                 uni.getUserInfo({
                                     success(res) {
-                                        console.log(res.userInfo.nickName)
                                         uni.setStorageSync('nickName', res.userInfo.nickName);
                                         uni.login({
                                             success: res => {
                                                 that.$fly.post('https://mp.zymcloud.com/hp-hd/applet/activity/getAppid', {
                                                     code: res.code
                                                 }).then((res) => {
-                                                    console.log(res);
-                                                    uni.setStorageSync('userInfo', res.data.data.openid);
+                                                    uni.setStorageSync('openid', res.data.data.openid);
                                                     uni.switchTab({
                                                         url: '../index/index'
                                                     })
@@ -51,8 +47,8 @@
                         content: '未经授权无法使用该功能！'
                     })
                 }
-            },
-            checkOpenId() {
+            }
+            /*checkOpenId() {
                 const that = this;
                 uni.getSetting({
                     success(res) {
@@ -73,7 +69,7 @@
                         }
                     }
                 })
-            }
+            }*/
         }
     }
 </script>
