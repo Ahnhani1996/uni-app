@@ -2,7 +2,7 @@
     <view>
         <view class="gift">
             <view class="avater">
-                <img :src="player.coverImg" alt="">
+                <image :src="player.coverImg"></image>
                 <view>{{player.name}}</view>
             </view>
             <view class="data">
@@ -28,7 +28,7 @@
                 <view class="item" v-for="(item,i) in giftList" :key="i" @click="selectGift(i)">
                     <view :class="{selected:i === currentSelected}">
                         <view class="icon">
-                            <image :src="item.icon"/>
+                            <image :src="item.icon"></image>
                         </view>
                         {{item.name}}
                     </view>
@@ -177,7 +177,7 @@
             text-align: center;
             margin: 8% auto 5%;
 
-            img {
+            image {
                 width: 85px;
                 height: 85px;
                 border-radius: 50%;

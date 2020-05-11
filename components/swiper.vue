@@ -1,12 +1,12 @@
 <template>
-    <div>
+    <view>
         <swiper class="swiper" indicator-dots="true" autoplay="true" circular="true" indicator-color="#ffffff"
                 indicator-active-color="#3478f6">
             <swiper-item v-for="(item,i) in background" :key="i">
-                <img :src="item" alt="">
+                <image :src="item"></image>
             </swiper-item>
         </swiper>
-    </div>
+    </view>
 </template>
 
 <script>
@@ -23,7 +23,7 @@
     .swiper {
         height: 200px;
 
-        img {
+        image {
             width: 100%;
             height: 200px;
         }

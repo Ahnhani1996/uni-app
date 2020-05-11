@@ -2,7 +2,7 @@
     <view>
         <view class="vote">
             <view class="avater">
-                <img :src="player.coverImg" alt="">
+                <image :src="player.coverImg"></image>
                 <view>{{player.name}}</view>
             </view>
             <view class="data">
@@ -39,7 +39,7 @@
                 <scroll-view scroll-y="true" style="height: 265px" v-if="hdPlayerGiftlist.length>0">
                     <view class="hdPlayerGiftlist">
                         <view class="item" v-for="(item,i) in hdPlayerGiftlist" :key="i">
-                            <image class="extend3" :src="item.extend3"/>
+                            <image class="extend3" :src="item.extend3"></image>
                             <view class="name">{{item.extend2}}</view>
                             <view class="ticket">{{item.ticket}}票</view>
                         </view>
@@ -161,7 +161,7 @@
             text-align: center;
             margin: 8% auto 5%;
 
-            img {
+            image {
                 width: 85px;
                 height: 85px;
                 border-radius: 50%;

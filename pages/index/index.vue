@@ -30,7 +30,7 @@
             <view class="item" v-for="(item,i) in players" :key="i" @click="intentToVote(item.id)">
                 <view class="id">编号：{{item.id}}</view>
                 <view class="cover">
-                    <img :src="item.coverImg" alt="">
+                    <image :src="item.coverImg"></image>
                 </view>
                 <view>{{item.name}}</view>
                 <view class="ticket">{{item.ticket}}票</view>
@@ -336,7 +336,7 @@
                 padding-top: 100%;
                 position: relative;
 
-                img {
+                image {
                     position: absolute;
                     top: 0;
                     left: 0;

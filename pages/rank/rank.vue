@@ -18,7 +18,7 @@
                 </view>
                 <view class="playerList1">
                     <view class="item" v-for="(item,i) in playerList1" :key="i" @click="intentToVote(item.id)">
-                        <img class="avater" :src="item.coverImg" alt="">
+                        <image class="avater" :src="item.coverImg"></image>
                         <view class="mid">
                             <view class="name">{{item.name}}</view>
                             <view class="ticket">{{item.ticket}}票</view>

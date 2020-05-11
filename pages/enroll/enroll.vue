@@ -27,7 +27,7 @@
             <view class="btn" v-if="images.length===0" @click="imgUpload">+</view>
             <view v-else class="img-group">
                 <view class="img-for" v-for="(item,index) in images" :key="index" @click="actionSheet(index)">
-                    <img class="img" :src="item" alt="">
+                    <image class="img" :src="item"></image>
                 </view>
                 <view v-if="images.length<3" class="img-btn" @click="imgUpload">+</view>
             </view>
