@@ -126,7 +126,7 @@
                             total_fee: total_fee,
                             js_code: res.code
                         }).then(res => {
-                            if (res.data.code == 0) {
+                            if (res.data.code === 0) {
                                 uni.requestPayment({
                                     nonceStr: res.data.data.nonceStr,
                                     package: res.data.data.package,
@@ -148,6 +148,13 @@
                                             console.log(res);
                                         }).catch(err => {
                                             console.log(err);
+                                        })
+                                        that.$fly.post('https://mp.zymcloud.com/hp-hd/applet/pay/orderConfirm', {
+                                            orderId: res.data.data.orderId
+                                        }).then(res => {
+                                            console.log(res)
+                                        }).catch(err => {
+                                            console.log(err)
                                         })
                                     }
                                 })
